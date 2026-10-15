@@ -53,7 +53,6 @@ export async function submitContact(
     };
   }
 
-  const webhookUrl = process.env.CONTACT_WEBHOOK_URL;
   const undelivered: ContactState = {
     ok: false,
     message:
@@ -61,24 +60,38 @@ export async function submitContact(
     values: fields,
   };
 
-  if (!webhookUrl) {
+  const wpUrl = process.env.WP_URL?.replace(/\/$/, "");
+  const formId = process.env.CF7_FORM_ID;
+
+  if (!wpUrl || !formId) {
     if (process.env.NODE_ENV !== "production") {
-      console.info("CONTACT_WEBHOOK_URL is not set, nothing was sent:", fields);
+      console.info("WP_URL or CF7_FORM_ID is not set, nothing was sent:", fields);
       return SENT;
     }
     console.error(
-      "Contact form submitted but CONTACT_WEBHOOK_URL is not set; the enquiry was not delivered.",
+      "Contact form submitted but WP_URL or CF7_FORM_ID is not set; the enquiry was not delivered.",
     );
     return undelivered;
   }
 
+  const body = new FormData();
+  for (const name of FIELDS) {
+    body.append(name, fields[name]);
+  }
+  body.append("website", "");
+  body.append("_wpcf7_unit_tag", `wpcf7-f${formId}-o1`);
+
   try {
-    const response = await fetch(webhookUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(fields),
-    });
-    if (!response.ok) throw new Error(`Webhook responded ${response.status}`);
+    const response = await fetch(
+      `${wpUrl}/wp-json/contact-form-7/v1/contact-forms/${formId}/feedback`,
+      { method: "POST", body, cache: "no-store" },
+    );
+    const data = await response.json();
+
+    if (data.status !== "mail_sent") {
+      console.error("Contact form rejected by WordPress:", data);
+      return undelivered;
+    }
   } catch (error) {
     console.error("Contact form delivery failed:", { error });
     return undelivered;
