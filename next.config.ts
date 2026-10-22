@@ -6,8 +6,9 @@ const csp = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob:",
+  "img-src 'self' data: blob: https://server.arcgisonline.com",
   "font-src 'self' data:",
+  "frame-src https://www.google.com",
   `connect-src 'self'${isDev ? " ws: wss:" : ""}`,
   "frame-ancestors 'none'",
   "base-uri 'self'",
@@ -18,6 +19,9 @@ const csp = [
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  experimental: {
+    agentUpgrade: "security",
+  },
   poweredByHeader: false,
   cacheComponents: true,
   partialPrefetching: true,

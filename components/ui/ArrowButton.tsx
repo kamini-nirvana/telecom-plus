@@ -15,8 +15,14 @@ type ArrowTileProps = {
   className?: string;
 };
 
+type ArrowLinkProps = {
+  href: string;
+  children: ReactNode;
+  className?: string;
+};
+
 const VARIANTS = {
-  light: { shell: "bg-white text-ink", tile: "bg-ink text-white" },
+  light: { shell: "bg-white text-ink hover:text-white focus-visible:text-white", tile: "bg-ink text-white" },
   dark: { shell: "bg-ink text-white", tile: "bg-white text-ink" },
 } as const;
 
@@ -38,6 +44,18 @@ export function ArrowTile({ className = "" }: ArrowTileProps) {
   );
 }
 
+export function ArrowLink({ href, children, className = "" }: ArrowLinkProps) {
+  return (
+    <a
+      href={href}
+      className={`group inline-flex min-h-6 w-fit items-center gap-2 text-note text-brand-ink ${className}`}
+    >
+      <span className="link-wipe">{children}</span>
+      <ArrowUpRightIcon className="size-2.5 transition-transform duration-500 ease-out-expo group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none" />
+    </a>
+  );
+}
+
 export function ArrowButton({
   children,
   variant = "light",
@@ -48,9 +66,13 @@ export function ArrowButton({
   className = "",
 }: ArrowButtonProps) {
   const styles = VARIANTS[variant];
-  const classes = `group inline-flex min-h-11 items-center gap-5 py-[5px] pr-[5px] pl-5 text-small whitespace-nowrap transition-transform duration-300 ease-out-expo active:scale-[0.98] disabled:opacity-60 motion-reduce:transition-none ${styles.shell} ${className}`;
+  const classes = `group relative isolate inline-flex min-h-11 items-center gap-5 overflow-hidden py-[5px] pr-[5px] pl-5 text-small whitespace-nowrap transition-[color,scale] duration-500 ease-out-expo active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60 motion-reduce:transition-none ${styles.shell} ${className}`;
   const content = (
     <>
+      <span
+        aria-hidden="true"
+        className="absolute inset-0 -z-10 origin-right scale-x-0 bg-brand-ink transition-transform duration-500 ease-out-expo group-hover:origin-left group-hover:scale-x-100 group-focus-visible:origin-left group-focus-visible:scale-x-100 motion-reduce:transition-none"
+      />
       {children}
       <ArrowTile className={styles.tile} />
     </>

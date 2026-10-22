@@ -4,19 +4,18 @@ import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { submitContact, type ContactState } from "@/app/actions";
 import { ArrowButton } from "@/components/ui/ArrowButton";
+import { ChevronDownIcon } from "@/components/ui/icons";
+import type { ContactFormContent, FormField } from "@/lib/data";
 
 type ContactFormProps = {
+  form: ContactFormContent;
   submitLabel: string;
 };
 
-type FieldProps = {
-  name: string;
-  label: string;
-  placeholder: string;
-  type?: "text" | "email" | "tel";
-  autoComplete: string;
+type LabelProps = {
+  htmlFor: string;
+  text: string;
   required?: boolean;
-  defaultValue?: string;
 };
 
 const INITIAL_STATE: ContactState = { ok: false, message: "" };
@@ -24,27 +23,32 @@ const INITIAL_STATE: ContactState = { ok: false, message: "" };
 const INPUT_CLASSES =
   "mt-3 w-full border-b-2 border-ink/10 bg-transparent py-3 text-body transition-colors duration-300 placeholder:text-ink/50 hover:border-ink/30 focus:border-brand focus:outline-none";
 
+function Label({ htmlFor, text, required = false }: LabelProps) {
+  return (
+    <label htmlFor={htmlFor} className="text-small">
+      {text}
+      {required ? <span aria-hidden="true"> *</span> : null}
+    </label>
+  );
+}
+
 function Field({
-  name,
-  label,
-  placeholder,
-  type = "text",
-  autoComplete,
-  required = false,
+  field,
   defaultValue,
-}: FieldProps) {
+}: {
+  field: FormField;
+  defaultValue?: string;
+}) {
   return (
     <div>
-      <label htmlFor={name} className="text-small">
-        {label}
-      </label>
+      <Label htmlFor={field.name} text={field.label} required={field.required} />
       <input
-        id={name}
-        name={name}
-        type={type}
-        placeholder={placeholder}
-        autoComplete={autoComplete}
-        required={required}
+        id={field.name}
+        name={field.name}
+        type={field.type ?? "text"}
+        placeholder={field.placeholder}
+        autoComplete={field.autoComplete}
+        required={field.required}
         defaultValue={defaultValue}
         className={INPUT_CLASSES}
       />
@@ -55,80 +59,63 @@ function Field({
 function SubmitButton({ label }: { label: string }) {
   const { pending } = useFormStatus();
   return (
-    <ArrowButton type="submit" disabled={pending} className="shadow-card">
+    <ArrowButton type="submit" variant="dark" disabled={pending}>
       {pending ? "Sending…" : label}
     </ArrowButton>
   );
 }
 
-export function ContactForm({ submitLabel }: ContactFormProps) {
+export function ContactForm({ form, submitLabel }: ContactFormProps) {
   const [state, action] = useActionState(submitContact, INITIAL_STATE);
   const values = state.values ?? {};
 
   return (
     <form action={action} className="grid gap-x-20 gap-y-10 sm:grid-cols-2">
-      <Field
-        name="firstName"
-        label="First Name"
-        placeholder="Enter your first name"
-        autoComplete="given-name"
-        required
-        defaultValue={values.firstName}
-      />
-      <Field
-        name="lastName"
-        label="Last Name"
-        placeholder="Enter your last name"
-        autoComplete="family-name"
-        required
-        defaultValue={values.lastName}
-      />
-      <Field
-        name="businessName"
-        label="Business Name"
-        placeholder="Enter your business name"
-        autoComplete="organization"
-        defaultValue={values.businessName}
-      />
-      <Field
-        name="location"
-        label="City/Service Location"
-        placeholder="Enter your location"
-        autoComplete="address-level2"
-        defaultValue={values.location}
-      />
-      <Field
-        name="email"
-        label="Email"
-        placeholder="Enter your email"
-        type="email"
-        autoComplete="email"
-        required
-        defaultValue={values.email}
-      />
-      <Field
-        name="phone"
-        label="Phone Number"
-        placeholder="Enter your phone number"
-        type="tel"
-        autoComplete="tel"
-        defaultValue={values.phone}
-      />
+      {form.fields.map((field) => (
+        <Field
+          key={field.name}
+          field={field}
+          defaultValue={values[field.name]}
+        />
+      ))}
 
       <div className="sm:col-span-2">
-        <label htmlFor="message" className="text-small">
-          Message
-        </label>
+        <Label htmlFor="topic" text={form.topic.label} required />
+        <div className="relative">
+          <select
+            id="topic"
+            name="topic"
+            required
+            defaultValue={values.topic ?? ""}
+            className={`${INPUT_CLASSES} appearance-none pr-8 invalid:text-ink/50`}
+          >
+            <option value="" disabled>
+              {form.topic.placeholder}
+            </option>
+            {form.topic.options.map((option) => (
+              <option key={option}>{option}</option>
+            ))}
+          </select>
+          <ChevronDownIcon className="pointer-events-none absolute right-1 bottom-4 size-3" />
+        </div>
+      </div>
+
+      <div className="sm:col-span-2">
+        <Label htmlFor="message" text={form.message.label} required />
         <textarea
           id="message"
           name="message"
-          rows={1}
+          rows={3}
           required
           minLength={10}
-          placeholder="Enter your message"
+          aria-describedby="message-hint"
+          placeholder={form.message.placeholder}
           defaultValue={values.message}
-          className={`${INPUT_CLASSES} field-sizing-content min-h-12 resize-y`}
+          className={`${INPUT_CLASSES} field-sizing-content min-h-24 resize-y`}
         />
+        <p id="message-hint" className="mt-5 text-note text-ink/60">
+          {form.message.hint}
+        </p>
       </div>
 
       <div aria-hidden="true" className="hidden">
@@ -142,7 +129,7 @@ export function ContactForm({ submitLabel }: ContactFormProps) {
         />
       </div>
 
-      <div className="flex flex-col items-end gap-4 sm:col-span-2 sm:mt-2">
+      <div className="flex flex-col items-end gap-4 sm:col-span-2">
         <SubmitButton label={submitLabel} />
         <p
           role="status"

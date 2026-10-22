@@ -1,40 +1,46 @@
 import type { Metadata } from "next";
-import { Contact } from "@/components/Contact";
-import { ContactHero } from "@/components/ContactHero";
+import { ContactEnquiry } from "@/components/ContactEnquiry";
+import { CtaBand } from "@/components/CtaBand";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-import { OfficeMap } from "@/components/OfficeMap";
-import { ServiceAreas } from "@/components/ServiceAreas";
+import { PageHero } from "@/components/PageHero";
+import {
+  CONTACT_META,
+  CONTACT_PAGE_HERO,
+  CONTACT_PANEL,
+  ENQUIRY_INTRO,
+  SUPPORT_BAND,
+} from "@/data/contact";
 import {
   CONTACT,
-  CONTACT_HERO,
-  CONTACT_INTRO,
+  CONTACT_FORM,
   FOOTER,
   FOOTER_COLUMNS,
   HEADER_CTA,
   NAV_LINKS,
-  OFFICE,
-  SERVICE_AREAS,
-  SERVICE_AREAS_INTRO,
   SOCIAL_LINKS,
 } from "@/lib/data";
 
-export const metadata: Metadata = {
-  title: "Contact Telecom Plus — Business phone systems in Greater Vancouver",
-  description:
-    "Call 604-696-3828, email sales@telecomplus.ca or send us a few details. Telecom Plus supports businesses across Greater Vancouver from our office in Delta, BC.",
-  alternates: { canonical: "/contact" },
-};
+export const metadata: Metadata = CONTACT_META;
 
 export default function Page() {
   return (
     <>
-      <Header navLinks={NAV_LINKS} cta={HEADER_CTA} contact={CONTACT} />
+      <Header
+        navLinks={NAV_LINKS}
+        cta={HEADER_CTA}
+        contact={CONTACT}
+        current="/contact"
+      />
       <main id="main">
-        <ContactHero content={CONTACT_HERO} />
-        <Contact intro={CONTACT_INTRO} contact={CONTACT} />
-        <OfficeMap office={OFFICE} />
-        <ServiceAreas intro={SERVICE_AREAS_INTRO} areas={SERVICE_AREAS} />
+        <PageHero content={CONTACT_PAGE_HERO} />
+        <ContactEnquiry
+          intro={ENQUIRY_INTRO}
+          panel={CONTACT_PANEL}
+          contact={CONTACT}
+          form={CONTACT_FORM}
+        />
+        <CtaBand content={SUPPORT_BAND} contact={CONTACT} />
       </main>
       <Footer
         content={FOOTER}

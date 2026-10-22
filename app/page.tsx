@@ -12,6 +12,7 @@ import {
   ABOUT_POINTS,
   CLIENT_LOGOS,
   CONTACT,
+  CONTACT_FORM,
   CONTACT_INTRO,
   DEFAULT_PROJECT_ID,
   FOOTER,
@@ -23,7 +24,6 @@ import {
   PROCESS_STEPS,
   PROJECTS,
   PROJECTS_INTRO,
-  PROJECTS_MAP,
   SOCIAL_LINKS,
   SOLUTIONS,
   SOLUTIONS_INTRO,
@@ -42,11 +42,10 @@ export default function Page() {
           intro={PROJECTS_INTRO}
           projects={PROJECTS}
           defaultProjectId={DEFAULT_PROJECT_ID}
-          map={PROJECTS_MAP}
         />
         <Testimonials testimonials={TESTIMONIALS} />
         <Process intro={PROCESS_INTRO} steps={PROCESS_STEPS} />
-        <Contact intro={CONTACT_INTRO} contact={CONTACT} />
+        <Contact intro={CONTACT_INTRO} contact={CONTACT} form={CONTACT_FORM} />
       </main>
       <Footer
         content={FOOTER}

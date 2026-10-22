@@ -1,19 +1,17 @@
 import { ProjectsExplorer } from "@/components/ProjectsExplorer";
 import { Eyebrow } from "@/components/ui/Eyebrow";
-import type { NavLink, Photo, Project, SectionIntro } from "@/lib/data";
+import type { NavLink, Project, SectionIntro } from "@/lib/data";
 
 type ProjectsProps = {
   intro: SectionIntro & { allProjects: NavLink };
   projects: readonly Project[];
   defaultProjectId: string;
-  map: Photo;
 };
 
 export function Projects({
   intro,
   projects,
   defaultProjectId,
-  map,
 }: ProjectsProps) {
   return (
     <section
@@ -35,7 +33,6 @@ export function Projects({
         <ProjectsExplorer
           projects={projects}
           defaultProjectId={defaultProjectId}
-          map={map}
           allProjects={intro.allProjects}
         />
       </div>

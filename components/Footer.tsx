@@ -8,7 +8,7 @@ import {
 import type { ContactDetails, FooterColumn, SocialLink } from "@/lib/data";
 
 type FooterProps = {
-  content: { tagline: string; body: string; legal: string; copyright: string };
+  content: { tagline: string; body: string; legal: string };
   contact: ContactDetails;
   columns: readonly FooterColumn[];
   socialLinks: readonly SocialLink[];
@@ -116,14 +116,9 @@ export function Footer({
       </div>
 
       <div className="container-page">
-        <div className="flex flex-col gap-3 border-t border-white/10 py-6 text-small text-white/60 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-3 border-t border-white/10 py-6 text-small text-white/60 md:flex-row md:items-center md:justify-between max-sm:items-center max-sm:text-center">
           <p>{content.legal}</p>
           <p className="flex flex-wrap items-center gap-x-3">
-            {content.copyright}
-            <span
-              aria-hidden="true"
-              className="size-1 rounded-full bg-white/60"
-            />
             <span>
               Designed &amp; Developed by{" "}
               <a

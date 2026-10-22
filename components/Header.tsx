@@ -8,9 +8,10 @@ type HeaderProps = {
   navLinks: readonly NavLink[];
   cta: NavLink;
   contact: ContactDetails;
+  current?: string;
 };
 
-export function Header({ navLinks, cta, contact }: HeaderProps) {
+export function Header({ navLinks, cta, contact, current }: HeaderProps) {
   return (
     <>
       <div className="bg-ink text-white">
@@ -22,13 +23,13 @@ export function Header({ navLinks, cta, contact }: HeaderProps) {
         </p>
       </div>
 
-      <header className="sticky -top-2 z-20 h-0 text-white lg:-top-4">
+      <header className="sticky top-0 z-20 h-0 text-white">
         <div className="relative">
           <div
             aria-hidden="true"
             className="header-backdrop absolute inset-0 -z-10 bg-ink/90 backdrop-blur-md"
           />
-          <div className="container-page flex items-center justify-between gap-6 pt-6 pb-4 lg:pt-10 lg:pb-6">
+          <div className="container-page flex items-center justify-between gap-6 py-3 lg:py-4">
             <Link
               href="/"
               aria-label="Telecom Plus — home"
@@ -52,7 +53,8 @@ export function Header({ navLinks, cta, contact }: HeaderProps) {
                   <li key={link.href}>
                     <a
                       href={link.href}
-                      className="link-wipe flex min-h-11 items-center text-small uppercase"
+                      aria-current={link.href === current ? "page" : undefined}
+                      className="link-wipe flex min-h-11 items-center text-small uppercase aria-[current=page]:after:h-0.5 aria-[current=page]:after:transform-none aria-[current=page]:after:bg-brand"
                     >
                       {link.label}
                     </a>
@@ -65,7 +67,12 @@ export function Header({ navLinks, cta, contact }: HeaderProps) {
               <ArrowButton href={cta.href}>{cta.label}</ArrowButton>
             </div>
 
-            <MobileMenu navLinks={navLinks} cta={cta} />
+            <MobileMenu
+              navLinks={navLinks}
+              cta={cta}
+              contact={contact}
+              current={current}
+            />
           </div>
         </div>
       </header>

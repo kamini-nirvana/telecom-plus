@@ -61,16 +61,16 @@ export function ProcessStepper({ steps }: { steps: readonly ProcessStep[] }) {
 
       <div
         aria-live="polite"
-        className="relative isolate overflow-hidden rounded-[4px] rounded-tr-[120px] bg-linear-to-r from-white/90 to-white/60 p-5 sm:rounded-tr-[230px] lg:min-h-[460px]"
+        className="relative isolate overflow-hidden rounded-[4px] rounded-tr-[120px] bg-linear-to-r from-white/90 to-white/60 p-5 sm:h-[520px] sm:rounded-tr-[230px] lg:h-[500px]"
       >
-        <FadeSwap swapKey={active.id}>
-          <span
-            aria-hidden="true"
-            className="absolute right-0 -bottom-[52px] -z-10 text-[200px] leading-none tracking-tight text-white select-none sm:-bottom-[62px] sm:text-[280px]"
-          >
-            {number}
-          </span>
+        <span
+          aria-hidden="true"
+          className="absolute right-0 -bottom-[52px] -z-10 text-[200px] leading-none tracking-tight text-white tabular-nums select-none sm:-bottom-[62px] sm:text-[280px]"
+        >
+          {number}
+        </span>
 
+        <FadeSwap swapKey={active.id} className="flex h-full flex-col">
           <p className="label-micro text-brand-ink">{active.eyebrow}</p>
           <h3 className="mt-1 pr-16 text-lead sm:pr-24">{active.title}</h3>
           <p className="mt-2 max-w-[520px] pr-10 text-small text-ink/60 sm:pr-0">
@@ -83,7 +83,7 @@ export function ProcessStepper({ steps }: { steps: readonly ProcessStep[] }) {
             width={active.image.width}
             height={active.image.height}
             sizes="(max-width: 640px) 100vw, 360px"
-            className="mt-10 h-auto w-full max-w-[360px] rounded-[4px] shadow-card lg:mt-[72px]"
+            className="mt-10 h-auto w-full max-w-[360px] rounded-[4px] shadow-card sm:mt-auto"
           />
           <p className="label-micro mt-3 text-brand-ink">
             Step {number} of {total}

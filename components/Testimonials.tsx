@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import {
   AnimatePresence,
@@ -25,16 +25,9 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
   const reduce = useReducedMotion();
 
   const count = testimonials.length;
-  const rotating = count > 1 && !paused && !reduce;
+  const timed = count > 1 && !reduce;
 
-  useEffect(() => {
-    if (!rotating) return;
-    const timer = window.setInterval(
-      () => setIndex((i) => (i + 1) % count),
-      ROTATE_MS,
-    );
-    return () => window.clearInterval(timer);
-  }, [rotating, count]);
+  const next = () => setIndex((i) => (i + 1) % count);
 
   const current = testimonials[index];
   if (!current) return null;
@@ -89,19 +82,53 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
           </AnimatePresence>
         </LazyMotion>
 
-        <button
-          type="button"
-          aria-label={paused ? "Resume testimonials" : "Pause testimonials"}
-          aria-pressed={paused}
-          onClick={() => setPaused(!paused)}
-          className="absolute right-5 bottom-5 grid size-11 place-items-center rounded-full border-2 border-white/80 transition-[background-color,color,scale] duration-300 ease-out-expo hover:scale-105 hover:bg-white hover:text-brand-ink motion-reduce:hover:scale-100 sm:right-9"
-        >
-          {paused ? (
-            <PlayIcon className="size-3" />
-          ) : (
-            <PauseIcon className="size-3" />
-          )}
-        </button>
+        {timed ? (
+          <div className="mt-6 flex justify-end md:absolute md:right-9 md:bottom-5 md:mt-0">
+            <button
+              type="button"
+              aria-label={paused ? "Resume testimonials" : "Pause testimonials"}
+              aria-pressed={paused}
+              onClick={() => setPaused(!paused)}
+              className="relative grid size-11 place-items-center rounded-full transition-[background-color,color,scale] duration-300 ease-out-expo hover:scale-105 hover:bg-white hover:text-brand-ink motion-reduce:hover:scale-100"
+            >
+              <svg
+                aria-hidden
+                viewBox="0 0 44 44"
+                className="absolute inset-0 -rotate-90"
+              >
+                <circle
+                  cx="22"
+                  cy="22"
+                  r="20.5"
+                  fill="none"
+                  strokeWidth="3"
+                  className="stroke-white/30"
+                />
+                <circle
+                  key={index}
+                  cx="22"
+                  cy="22"
+                  r="20.5"
+                  fill="none"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  pathLength={1}
+                  strokeDasharray={1}
+                  style={{
+                    animationDuration: `${ROTATE_MS}ms`,
+                    animationPlayState: paused ? "paused" : "running",
+                  }}
+                  className="animate-ring stroke-white"
+                />
+              </svg>
+              {paused ? (
+                <PlayIcon className="size-3" />
+              ) : (
+                <PauseIcon className="size-3" />
+              )}
+            </button>
+          </div>
+        ) : null}
       </div>
 
       <div className="-mt-0.5 flex justify-center">
@@ -115,8 +142,20 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
             className="grid h-11 place-items-center px-[3px]"
           >
             <span
-              className={`block h-1 rounded-full transition-colors duration-300 ${i === index ? "w-5 bg-brand" : "w-1 bg-brand/50"}`}
-            />
+              className={`relative block h-1 overflow-hidden rounded-full bg-brand/30 transition-[width] duration-500 ease-out-expo ${i === index ? "w-10" : "w-1"}`}
+            >
+              {i === index ? (
+                <span
+                  key={index}
+                  onAnimationEnd={next}
+                  style={{
+                    animationDuration: `${ROTATE_MS}ms`,
+                    animationPlayState: paused ? "paused" : "running",
+                  }}
+                  className={`absolute inset-0 origin-left bg-brand ${timed ? "animate-progress" : ""}`}
+                />
+              ) : null}
+            </span>
           </button>
         ))}
       </div>

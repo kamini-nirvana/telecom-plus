@@ -1,48 +1,28 @@
 "use client";
 
-import { useState, type CSSProperties } from "react";
+import { useState } from "react";
 import Image from "next/image";
+import { ProjectMap } from "@/components/ProjectMap";
 import { ArrowTile } from "@/components/ui/ArrowButton";
-import {
-  ArrowUpRightIcon,
-  MapPinIcon,
-  MinusIcon,
-  PlusIcon,
-} from "@/components/ui/icons";
-import type { NavLink, Photo, Project } from "@/lib/data";
+import { ArrowUpRightIcon } from "@/components/ui/icons";
+import type { NavLink, Project } from "@/lib/data";
 
 type ProjectsExplorerProps = {
   projects: readonly Project[];
   defaultProjectId: string;
-  map: Photo;
   allProjects: NavLink;
 };
-
-const ZOOM_LEVELS = [1, 1.5, 2.25] as const;
-
-const OFF_MAP_VIEW = { x: 0.05, y: 0.85 };
 
 export function ProjectsExplorer({
   projects,
   defaultProjectId,
-  map,
   allProjects,
 }: ProjectsExplorerProps) {
   const [selectedId, setSelectedId] = useState(defaultProjectId);
-  const [zoomIndex, setZoomIndex] = useState(0);
 
   const selected =
     projects.find((project) => project.id === selectedId) ?? projects[0];
   if (!selected) return null;
-
-  const view = selected.pin ?? OFF_MAP_VIEW;
-  const canvasStyle = {
-    "--px": view.x,
-    "--py": view.y,
-    "--fx": 0.7,
-    "--fy": 0.42,
-    "--zoom": ZOOM_LEVELS[zoomIndex],
-  } as CSSProperties;
 
   return (
     <div className="grid gap-5 lg:grid-cols-[560px_1fr]">
@@ -92,64 +72,7 @@ export function ProjectsExplorer({
       </ul>
 
       <div className="relative">
-        <div className="map-viewport relative h-[300px] overflow-hidden rounded-[4px] bg-sky shadow-card md:h-[440px]">
-          <div className="map-canvas" style={canvasStyle}>
-            <Image
-              src={map.src}
-              alt={map.alt}
-              fill
-              sizes="(max-width: 1024px) 200vw, 1400px"
-              className="object-cover"
-            />
-            {selected.pin ? (
-              <div
-                className="absolute flex -translate-x-1/2 -translate-y-full flex-col items-center gap-2"
-                style={{
-                  left: `${selected.pin.x * 100}%`,
-                  top: `${selected.pin.y * 100}%`,
-                }}
-              >
-                <span className="bg-white px-3 py-2 text-micro whitespace-nowrap shadow-card">
-                  {selected.title}
-                </span>
-                <span className="relative grid place-items-center">
-                  <span
-                    aria-hidden="true"
-                    className="absolute -bottom-1.5 size-3 rounded-full bg-brand motion-safe:animate-ping-soft motion-reduce:hidden"
-                  />
-                  <MapPinIcon className="relative size-6 text-brand" />
-                </span>
-              </div>
-            ) : null}
-          </div>
-
-          {selected.pin ? null : (
-            <p className="absolute top-2.5 left-2.5 bg-white px-3 py-2 text-micro shadow-card">
-              {selected.location} — beyond this map view
-            </p>
-          )}
-
-          <div className="absolute right-2.5 bottom-2.5 flex flex-col shadow-card">
-            <button
-              type="button"
-              aria-label="Zoom in"
-              disabled={zoomIndex === ZOOM_LEVELS.length - 1}
-              onClick={() => setZoomIndex(zoomIndex + 1)}
-              className="grid size-11 place-items-center border-b border-ink/10 bg-white transition-colors hover:bg-tint disabled:text-ink/30 md:size-7"
-            >
-              <PlusIcon className="size-3" />
-            </button>
-            <button
-              type="button"
-              aria-label="Zoom out"
-              disabled={zoomIndex === 0}
-              onClick={() => setZoomIndex(zoomIndex - 1)}
-              className="grid size-11 place-items-center bg-white transition-colors hover:bg-tint disabled:text-ink/30 md:size-7"
-            >
-              <MinusIcon className="size-3" />
-            </button>
-          </div>
-        </div>
+        <ProjectMap center={selected.coords} label={selected.title} />
 
         <article
           aria-live="polite"
