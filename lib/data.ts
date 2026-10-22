@@ -106,6 +106,7 @@ export type PageHeroContent = {
   jumpLinks?: { label: string; links: readonly NavLink[] };
 };
 
+
 export type CtaBandContent = {
   eyebrow: string;
   heading: string;
