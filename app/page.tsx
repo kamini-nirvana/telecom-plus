@@ -7,6 +7,7 @@ import { Process } from "@/components/Process";
 import { Projects } from "@/components/Projects";
 import { Solutions } from "@/components/Solutions";
 import { Testimonials } from "@/components/Testimonials";
+
 import {
   ABOUT,
   ABOUT_POINTS,
@@ -29,6 +30,7 @@ import {
   SOLUTIONS_INTRO,
   TESTIMONIALS,
 } from "@/lib/data";
+import ThankYouPage from "./thank-you/page";
 
 export default function Page() {
   return (

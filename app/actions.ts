@@ -1,5 +1,5 @@
 "use server";
-
+import { redirect } from "next/navigation";
 export type ContactState = {
   ok: boolean;
   message: string;
@@ -86,5 +86,5 @@ export async function submitContact(
     return undelivered;
   }
 
-  return SENT;
+    redirect("/thank-you");
 }
