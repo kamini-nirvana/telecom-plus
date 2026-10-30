@@ -58,6 +58,8 @@ export type AboutPoint = {
 
 export type Project = {
   id: string;
+  /** Matching entry in CLIENT_LOCATIONS, so the map can highlight it. */
+  clientId: string;
   title: string;
   category: string;
   location: string;
@@ -105,7 +107,6 @@ export type PageHeroContent = {
   cta: NavLink;
   jumpLinks?: { label: string; links: readonly NavLink[] };
 };
-
 
 export type CtaBandContent = {
   eyebrow: string;
@@ -264,7 +265,10 @@ export const SOLUTIONS: readonly Solution[] = [
         description: "Arrange ongoing maintenance and help when issues arise.",
       },
     ],
-    cta: { label: "Explore Legacy Support", href: "/solutions/legacy-system-support" },
+    cta: {
+      label: "Explore Legacy Support",
+      href: "/solutions/legacy-system-support",
+    },
     image: {
       src: "/images/solutions/legacy-support.png",
       alt: "Wall-mounted legacy telephone system cabinets and wiring",
@@ -363,7 +367,10 @@ export const SOLUTIONS: readonly Solution[] = [
         description: "Design and install UPS systems for essential equipment.",
       },
     ],
-    cta: { label: "Explore Infrastructure", href: "/solutions/network-infrastructure" },
+    cta: {
+      label: "Explore Infrastructure",
+      href: "/solutions/network-infrastructure",
+    },
     image: {
       src: "/images/solutions/infrastructure.png",
       alt: "Technician fitting a patch panel into a network rack",
@@ -396,7 +403,10 @@ export const SOLUTIONS: readonly Solution[] = [
         description: "Consider on-site or remote backup for supported systems.",
       },
     ],
-    cta: { label: "Explore Surveillance", href: "/solutions/video-surveillance" },
+    cta: {
+      label: "Explore Surveillance",
+      href: "/solutions/video-surveillance",
+    },
     image: {
       src: "/images/solutions/surveillance.png",
       alt: "Telecom Plus dome security camera mounted on a ceiling",
@@ -467,11 +477,16 @@ export const PROJECTS_INTRO = {
   heading: "Projects built around real business needs.",
   body: "Explore a selection of phone, network and communication projects completed by the BY Solution team, highlighting the range of systems and business environments they’ve supported.",
   allProjects: { label: "Show all projects", href: "/projects" },
+  allLocations: {
+    label: "See every client location",
+    href: "/projects#directory",
+  },
 };
 
 export const PROJECTS: readonly Project[] = [
   {
     id: "dunsmuir-middle-school",
+    clientId: "dunsmuir-middle-school",
     title: "Dunsmuir Middle School",
     category: "Phone systems & integration",
     location: "Colwood, Vancouver Island",
@@ -483,6 +498,7 @@ export const PROJECTS: readonly Project[] = [
   },
   {
     id: "chilliwack-ford",
+    clientId: "chilliwack-ford",
     title: "Chilliwack Ford",
     category: "Phone systems & network infrastructure",
     location: "Chilliwack",
@@ -496,6 +512,7 @@ export const PROJECTS: readonly Project[] = [
   },
   {
     id: "school-district-62-board-office",
+    clientId: "school-board-office-sd62",
     title: "School District 62 Board Office",
     category: "Phone systems & integration",
     location: "Langford, Vancouver Island",
@@ -643,10 +660,16 @@ export const FOOTER_COLUMNS: readonly FooterColumn[] = [
         label: "Business Communications",
         href: "/solutions/business-communications",
       },
-      { label: "Legacy System Support", href: "/solutions/legacy-system-support" },
+      {
+        label: "Legacy System Support",
+        href: "/solutions/legacy-system-support",
+      },
       { label: "Calling & SIP", href: "/solutions/calling-sip" },
       { label: "Safety Systems", href: "/solutions/safety-systems" },
-      { label: "Network Infrastructure", href: "/solutions/network-infrastructure" },
+      {
+        label: "Network Infrastructure",
+        href: "/solutions/network-infrastructure",
+      },
       { label: "Video Surveillance", href: "/solutions/video-surveillance" },
       { label: "Backup Power", href: "/solutions/backup-power" },
     ],

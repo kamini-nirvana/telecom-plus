@@ -56,12 +56,19 @@ export default function Page() {
                 projects={PROJECT_SUMMARIES}
                 categories={PROJECT_CATEGORIES}
                 labels={WORK_INTRO}
+                siteCount={
+                  CLIENT_LOCATIONS.filter((site) => site.coords.lng < -114)
+                    .length
+                }
               />
             </div>
           </div>
         </section>
 
-        <section className="relative isolate overflow-x-clip bg-linear-to-b from-mist to-surface pt-40 pb-24 lg:pt-[230px] lg:pb-[165px]">
+        <section
+          id="directory"
+          className="relative isolate scroll-mt-24 overflow-x-clip bg-linear-to-b from-mist to-surface pt-40 pb-24 lg:pt-[230px] lg:pb-[165px]"
+        >
           <div
             aria-hidden="true"
             className="absolute inset-x-[-15%] top-0 -z-10 h-[110px] rounded-b-[50%] bg-surface"

@@ -5,6 +5,7 @@ import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { Process } from "@/components/Process";
 import { Projects } from "@/components/Projects";
+import { CLIENT_LOCATIONS } from "@/data/projects";
 import { Solutions } from "@/components/Solutions";
 import { Testimonials } from "@/components/Testimonials";
 
@@ -43,6 +44,7 @@ export default function Page() {
         <Projects
           intro={PROJECTS_INTRO}
           projects={PROJECTS}
+          locations={CLIENT_LOCATIONS}
           defaultProjectId={DEFAULT_PROJECT_ID}
         />
         <Testimonials testimonials={TESTIMONIALS} />

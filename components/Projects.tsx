@@ -1,16 +1,19 @@
 import { ProjectsExplorer } from "@/components/ProjectsExplorer";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import type { ClientLocation } from "@/data/projects";
 import type { NavLink, Project, SectionIntro } from "@/lib/data";
 
 type ProjectsProps = {
-  intro: SectionIntro & { allProjects: NavLink };
+  intro: SectionIntro & { allProjects: NavLink; allLocations: NavLink };
   projects: readonly Project[];
+  locations: readonly ClientLocation[];
   defaultProjectId: string;
 };
 
 export function Projects({
   intro,
   projects,
+  locations,
   defaultProjectId,
 }: ProjectsProps) {
   return (
@@ -32,8 +35,10 @@ export function Projects({
       <div className="reveal container-page mt-12 lg:mt-[100px]">
         <ProjectsExplorer
           projects={projects}
+          locations={locations}
           defaultProjectId={defaultProjectId}
           allProjects={intro.allProjects}
+          allLocations={intro.allLocations}
         />
       </div>
     </section>
